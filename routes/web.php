@@ -11,7 +11,7 @@
 |
 */
 
-Route::get('reset_password/{token}', 'V1/UserController@resetPassword')->name('password.reset');
+Route::get('reset_password/{token}', 'V1\UserController@resetPassword')->name('password.reset');
 
 Route::view('/', 'welcome');
 
