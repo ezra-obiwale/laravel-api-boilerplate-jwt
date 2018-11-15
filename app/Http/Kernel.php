@@ -5,6 +5,7 @@ namespace App\Http;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 use Tymon\JWTAuth\Http\Middleware\RefreshToken;
 use Barryvdh\Cors\HandleCors;
+use Barryvdh\Cors\HandlePreflight;
 
 class Kernel extends HttpKernel
 {
@@ -17,6 +18,8 @@ class Kernel extends HttpKernel
      */
     protected $middleware = [
         \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
+        HandleCors::class,
+        HandlePreflight::class,
     ];
 
     /**
