@@ -19,7 +19,7 @@ class UserController extends SuperController
      */
     public function __construct()
     {
-        $this->middleware('auth:api', []);
+        $this->middleware('jwt.auth', []);
     }
 
     protected function model() {
