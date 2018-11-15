@@ -11,14 +11,9 @@
 |
 */
 
-Route::get('reset_password/{token}', ['as' => 'password.reset', function($token)
-{
-    // implement your reset password route here!
-}]);
+Route::get('reset_password/{token}', 'V1/UserController@resetPassword')->name('password.reset');
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::view('/', 'welcome');
 
 
 Route::group(['prefix' => 'admin'], function () {
