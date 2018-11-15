@@ -4,6 +4,7 @@ namespace App\Http;
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 use Tymon\JWTAuth\Http\Middleware\RefreshToken;
+use Barryvdh\Cors\HandleCors;
 
 class Kernel extends HttpKernel
 {
@@ -55,6 +56,7 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
 
         'jwt.auth' => \Tymon\JWTAuth\Http\Middleware\Authenticate::class,
-        'jwt.refresh' => RefreshToken::class
+        'jwt.refresh' => RefreshToken::class,
+        'cors' => HandleCors::class
     ];
 }
