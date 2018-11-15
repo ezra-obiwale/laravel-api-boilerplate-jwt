@@ -5,8 +5,9 @@ use Dingo\Api\Routing\Router;
 /** @var Router $api */
 $api = app(Router::class);
 
-$api->version('v1', function (Router $api) {
-    $api->group(['prefix' => 'auth', 'namespace' => 'App\Http\Controllers\V1\Auth'], function(Router $api) {
+$api->version('v1', ['middleware' => ['api', 'cors'], 'namespace' => 'App\Http\Controllers\V1'], function (Router $api) {
+    // auth
+    $api->group(['prefix' => 'auth', 'namespace' => 'Auth'], function(Router $api) {
         $api->post('signup', 'SignUpController@signUp');
         $api->post('login', 'LoginController@login');
 
@@ -15,9 +16,10 @@ $api->version('v1', function (Router $api) {
 
         $api->post('logout', 'LogoutController@logout');
         $api->post('refresh', 'RefreshController@refresh');
-        $api->get('me', 'UserController@me');
     });
+    $api->get('auth/me', 'UserController@me');
 
+    // protected
     $api->group(['middleware' => 'jwt.auth'], function(Router $api) {
         $api->get('protected', function() {
             return response()->json([
@@ -35,6 +37,7 @@ $api->version('v1', function (Router $api) {
         ]);
     });
 
+    // public
     $api->get('hello', function() {
         return response()->json([
             'message' => 'This is a simple example of item returned by your APIs. Everyone can see it.'

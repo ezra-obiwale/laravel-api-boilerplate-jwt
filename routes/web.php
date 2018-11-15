@@ -15,7 +15,6 @@ Route::get('reset_password/{token}', 'V1\UserController@resetPassword')->name('p
 
 Route::view('/', 'welcome');
 
-
 Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();
 });
