@@ -12,17 +12,17 @@
     "license": "MIT",
     "type": "project",
     "require": {
-        "barryvdh/laravel-cors": "0.11.*",
+        "barryvdh/laravel-cors": "^0.11",
         "d-scribe/laraquick": "^4.0",
-        "dingo/api": "2.0.0-alpha1",
+        "dingo/api": "2.0.0-alpha2",
         "doctrine/dbal": "^2.5",
         "fideloper/proxy": "^4.0",
         "laravel/framework": "5.*",
         "laravel/tinker": "^1.0",
         "laravel/socialite": "^3.0",
-        "mpociot/laravel-apidoc-generator": "^3.0.0",
+        "mpociot/laravel-apidoc-generator": "^3.0",
         "php": ">=7.1.3",
-        "tcg/voyager": "^1.0.0",
+        "tcg/voyager": "^1.0",
         "tymon/jwt-auth": "dev-develop"
     },
     "require-dev": {
