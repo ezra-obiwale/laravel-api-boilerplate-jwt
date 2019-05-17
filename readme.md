@@ -9,7 +9,7 @@ It is built on top some big guys:
 * JWT-Auth - [tymondesigns/jwt-auth](https://github.com/tymondesigns/jwt-auth)
 * Dingo API - [dingo/api](https://github.com/dingo/api)
 * Laravel-CORS - [barryvdh/laravel-cors](http://github.com/barryvdh/laravel-cors)
-* Laraquick - [ezraobiwale/laraquick](https://github.com/ezra-obiwale/laraquick)
+* Laraquick - [ezra-obiwale/laraquick](https://github.com/ezra-obiwale/laraquick)
 * Socialite - [laravel/socialite](https://github.com/laravel/socialite)
 * Voyager [vcg/voyager](https://github.com/the-control-group/voyager)
 
@@ -17,14 +17,19 @@ What I made is really simple: an integration of these packages and a setup of so
 
 ## Installation
 
-1. run `composer create-project ezraobiwale/laravel-api-boilerplate-jwt myNextProject`;
-2. have a coffee, nothing to do here;
+1. Clone the repo: `git clone https://github.com/ezra-obiwale/laravel-api-boilerplate-jwt myNextProject`
+2. Create **.env** file: `cp .env.example .env` and update the variables, especially database variables.
+3. Install dependencies: `composer install`
+4. Create Laravel's app key: `php artisan key:generate`
+5. Create JWT secret: `php artisan jwt:secret`
+6. Change the remote origin url: `git remote set-url origin /path/to/your/repo`
+7. Serve the project and enjoy.
 
 Once the project creation procedure will be completed, run the `php artisan migrate` command to install the required tables.
 
 ## Usage
 
-I wrote a couple of articles on this project that explain how to write an entire sample application with this boilerplate. They cover the older version of this boilerplate, but all the concepts are the same. You can find them on Sitepoint:
+[@francescomalatesta](https://github.com/francescomalatesta) wrote a couple of articles on this project that explain how to write an entire sample application with this boilerplate. They cover the older version of this boilerplate, but all the concepts are the same. You can find them on Sitepoint:
 
 Just be aware that some options in the `config/boilerplate.php` file are changed, so take a look to it.
 
@@ -37,7 +42,7 @@ Just be aware that some options in the `config/boilerplate.php` file are changed
 
 ### Ready-To-Use Authentication Controllers
 
-You don't have to worry about authentication and password recovery anymore. I created four controllers you can find in the `App\Api\V1\Controllers` for those operations.
+You don't have to worry about authentication and password recovery anymore. Four controllers are available in the `App\Api\V1\Controllers` for those operations.
 
 For each controller there's an already setup route in `routes/api.php` file:
 
