@@ -17,16 +17,16 @@ class CreateUsersTable extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->string('email')->unique()->nullable();
-            $table->string('password');
+            $table->string('password')->nullable();
             $table->string('username', 15)->nullable();
             $table->string('photo')->nullable();
             $table->string('slug')->unique()->nullable();
-            $table->string('api_token')->nullable();
-            $table->boolean('verified')->default(false);
+            $table->timestamp('verified_at')->nullable();
             $table->string('token')->nullable();
-            $table->boolean('active')->nullable()->default(true);
+            $table->boolean('is_active')->nullable()->default(true);
             $table->rememberToken();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

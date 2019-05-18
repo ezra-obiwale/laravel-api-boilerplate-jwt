@@ -3,15 +3,17 @@
 namespace App\Entities\V1;
 
 use Hash;
-use Tymon\JWTAuth\Contracts\JWTSubject;use Auth;
+use Tymon\JWTAuth\Contracts\JWTSubject;
+use Auth;
 use Mail;
 use App\Mail\ConfirmationAccount;
 use Illuminate\Notifications\Notifiable;
 use TCG\Voyager\Models\User as TCGUser;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends TCGUser implements JWTSubject
 {
-    use Notifiable;
+    use Notifiable, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -28,7 +30,16 @@ class User extends TCGUser implements JWTSubject
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token', 'api_token', 'token', 'role_id'
+        'password', 'remember_token', 'token'
+    ];
+
+    protected $casts = [
+        'is_active' => 'boolean',
+        'verified_at' => 'datetime:Y-m-d'
+    ];
+
+    protected $withArray = [
+        'is_active', 'verified_at'
     ];
 
     /**
@@ -40,7 +51,7 @@ class User extends TCGUser implements JWTSubject
     {
         parent::boot();
 
-        static::addGlobalScope(function($builder) {
+        static::addGlobalScope(function ($builder) {
             $builder->with('roles');
         });
 
@@ -48,8 +59,9 @@ class User extends TCGUser implements JWTSubject
             $user->token = str_random(40);
             
             $username = preg_replace('/[^a-z0-9]/', '', strtolower($user->name));
-            if (strlen($username) > 15)
+            if (strlen($username) > 15) {
                 $username = substr($username, 0, 15);
+            }
                 
             $user->username = $username;
         });
@@ -73,7 +85,7 @@ class User extends TCGUser implements JWTSubject
      */
     public function confirmEmail()
     {
-        $this->verified = true;
+        $this->verified_at = now();
         $this->token = null;
 
         $this->save();
@@ -99,7 +111,8 @@ class User extends TCGUser implements JWTSubject
         return [];
     }
 
-    public function roles() {
+    public function roles()
+    {
         return $this->belongsToMany(Role::class);
     }
 
