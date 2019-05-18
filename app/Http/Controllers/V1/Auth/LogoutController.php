@@ -5,6 +5,9 @@ namespace App\Http\Controllers\V1\Auth;
 use App\Http\Controllers\Controller;
 use Auth;
 
+/**
+ * @group Auth
+ */
 class LogoutController extends Controller
 {
     /**
@@ -18,7 +21,12 @@ class LogoutController extends Controller
     }
 
     /**
+     * Log out
+     * 
      * Log the user out (Invalidate the token)
+     * @authenticated
+     * 
+     * @responseFile app/test-responses/auth/logout.json
      *
      * @return \Illuminate\Http\JsonResponse
      */

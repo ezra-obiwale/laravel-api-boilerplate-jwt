@@ -9,8 +9,23 @@ use App\Http\Requests\V1\ForgotPasswordRequest;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+/**
+ * @group Auth
+ */
 class ForgotPasswordController extends Controller
 {
+    /**
+     * Reset Password
+     * 
+     * Send the reset pasword email
+     * 
+     * @bodyParam email string required The email address of the account
+     * 
+     * @requestFile app/test-responses/auth/recovery.json
+     *
+     * @param ForgotPasswordRequest $request
+     * @return void
+     */
     public function sendResetEmail(ForgotPasswordRequest $request)
     {
         $user = User::where('email', '=', $request->get('email'))->first();

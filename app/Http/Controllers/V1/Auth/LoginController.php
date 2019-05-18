@@ -10,10 +10,20 @@ use Tymon\JWTAuth\Exceptions\JWTException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Auth;
 
+/**
+ * @group Auth
+ */
 class LoginController extends Controller
 {
     /**
+     * Log in
+     * 
      * Log the user in
+     * 
+     * @bodyParam email string required The email of the user
+     * @bodyParam password string required The password of the user
+     * 
+     * @responseFile app/test-responses/auth/login.json
      *
      * @param LoginRequest $request
      * @param JWTAuth $JWTAuth

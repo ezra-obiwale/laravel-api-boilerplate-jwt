@@ -11,21 +11,41 @@ use App\Http\Requests\V1\ResetPasswordRequest;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Auth;
 
+/**
+ * @group Auth
+ */
 class ResetPasswordController extends Controller
 {
+    /**
+     * Reset Password - 2
+     * 
+     * Reset the password of the user
+     * 
+     * @bodyParam token string required The token sent to the user's email address
+     * @bodyParam email string requried The email address of the user
+     * @bodyParam password required The new password
+     * @bodyParam password_confirmation The new password again
+     * 
+     * @responseFile app/test-responses/auth/reset.json
+     *
+     * @param ResetPasswordRequest $request
+     * @param JWTAuth $JWTAuth
+     * @return void
+     */
     public function resetPassword(ResetPasswordRequest $request, JWTAuth $JWTAuth)
     {
         $response = $this->broker()->reset(
-            $this->credentials($request), function ($user, $password) {
+            $this->credentials($request),
+            function ($user, $password) {
                 $this->reset($user, $password);
             }
         );
 
-        if($response !== Password::PASSWORD_RESET) {
+        if ($response !== Password::PASSWORD_RESET) {
             throw new HttpException(500);
         }
 
-        if(!Config::get('boilerplate.reset_password.release_token')) {
+        if (!Config::get('boilerplate.reset_password.release_token')) {
             return response()->json([
                 'status' => 'ok',
             ]);
@@ -59,7 +79,10 @@ class ResetPasswordController extends Controller
     protected function credentials(ResetPasswordRequest $request)
     {
         return $request->only(
-            'email', 'password', 'password_confirmation', 'token'
+            'email',
+            'password',
+            'password_confirmation',
+            'token'
         );
     }
 

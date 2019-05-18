@@ -10,10 +10,15 @@ use Tymon\JWTAuth\Exceptions\JWTException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Auth;
 
+/**
+ * @group Auth
+ */
 class RefreshController extends Controller
 {
     /**
      * Refresh a token.
+     * @authenticated
+     * @responseFile app/test-responses/auth/refresh.json
      *
      * @return \Illuminate\Http\JsonResponse
      */
