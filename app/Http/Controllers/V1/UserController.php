@@ -28,7 +28,8 @@ class UserController extends SuperController
 
     protected function validationRules(array $data, $id = null) {
         return [
-            'name' => 'required',
+            'first_name' => 'required',
+            'last_name' => 'required',
             'email' => 'required|email',
             'photo' => 'file',
             'username' => 'unique',

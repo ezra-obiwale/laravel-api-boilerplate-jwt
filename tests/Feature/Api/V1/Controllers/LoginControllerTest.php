@@ -1,35 +1,30 @@
 <?php
 
-namespace App\Functional\Api\V1\Controllers;
+namespace App\Feature\Api\V1\Controllers;
 
 use Hash;
 use App\Entities\V1\User;
 use App\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Laraquick\Tests\Traits\Common;
 
 class LoginControllerTest extends TestCase
 {
-    use DatabaseMigrations;
+    use Common;
 
-    public function setUp()
+    protected function setUpOnce()
     {
-        parent::setUp();
-
-        $user = new User([
-            'name' => 'Test',
-            'email' => 'test@email.com',
-            'password' => '123456'
-        ]);
-
-        $user->save();
+        $this->user();
     }
 
     public function testLoginSuccessfully()
     {
-        $this->post('api/auth/login', [
-            'email' => 'test@email.com',
-            'password' => '123456'
-        ])->assertJson([
+        $resp = $this->post('api/auth/login', [
+            'email' => 'jdoe@email.com',
+            'password' => 'secret'
+        ]);
+        $this->storeResponse($resp, 'auth/login');
+        $resp->assertJson([
             'status' => 'ok'
         ])->assertJsonStructure([
             'status',
@@ -42,7 +37,7 @@ class LoginControllerTest extends TestCase
     {
         $this->post('api/auth/login', [
             'email' => 'unknown@email.com',
-            'password' => '123456'
+            'password' => 'secret'
         ])->assertJsonStructure([
             'error'
         ])->assertStatus(403);
@@ -51,7 +46,7 @@ class LoginControllerTest extends TestCase
     public function testLoginWithReturnsValidationError()
     {
         $this->post('api/auth/login', [
-            'email' => 'test@email.com'
+            'email' => 'jdoe@email.com'
         ])->assertJsonStructure([
             'error'
         ])->assertStatus(422);

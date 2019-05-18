@@ -1,35 +1,30 @@
 <?php
 
-namespace App\Functional\Api\V1\Controllers;
+namespace App\Feature\Api\V1\Controllers;
 
 use App\Entities\V1\User;
 use App\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Laraquick\Tests\Traits\Common;
 
 class ForgotPasswordControllerTest extends TestCase
 {
-    use DatabaseMigrations;
+    use Common;
 
-    public function setUp()
+    protected function setUpOnce()
     {
-        parent::setUp();
-
-        $user = new User([
-            'name' => 'Test',
-            'email' => 'test@email.com',
-            'password' => '123456'
-        ]);
-
-        $user->save();
+        $this->user();
     }
 
     public function testForgotPasswordRecoverySuccessfully()
     {
-        $this->post('api/auth/recovery', [
-            'email' => 'test@email.com'
-        ])->assertJson([
+        $resp = $this->post('api/auth/recovery', [
+            'email' => 'jdoe@email.com'
+        ]);
+        $this->storeResponse($resp, 'auth/recovery');
+        $resp->assertJson([
             'status' => 'ok'
-        ])->isOk();
+        ])->isOK();
     }
 
     public function testForgotPasswordRecoveryReturnsUserNotFoundError()

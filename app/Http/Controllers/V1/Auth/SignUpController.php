@@ -8,6 +8,7 @@ use Tymon\JWTAuth\JWTAuth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\SignUpRequest;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Auth;
 
 class SignUpController extends Controller
 {
@@ -27,7 +28,8 @@ class SignUpController extends Controller
         $token = $JWTAuth->fromUser($user);
         return response()->json([
             'status' => 'ok',
-            'token' => $token
+            'token' => $token,
+            'expires_in' => Auth::guard()->factory()->getTTL() * 60
         ], 201);
     }
 }

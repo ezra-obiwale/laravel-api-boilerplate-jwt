@@ -21,7 +21,7 @@ class User extends TCGUser implements JWTSubject
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'photo', 'city', 'country', 'slug', 'username'
+        'first_name', 'last_name', 'email', 'password', 'photo', 'city', 'country', 'slug', 'username'
     ];
 
     /**
@@ -58,12 +58,14 @@ class User extends TCGUser implements JWTSubject
         static::creating(function ($user) {
             $user->token = str_random(40);
             
-            $username = preg_replace('/[^a-z0-9]/', '', strtolower($user->name));
-            if (strlen($username) > 15) {
-                $username = substr($username, 0, 15);
+            if (!$user->username && ($user->first_name || $user->last_name)) {
+                $username = preg_replace('/[^a-z0-9]/', '', strtolower($user->first_name . $user->last_name));
+                if (strlen($username) > 15) {
+                    $username = substr($username, 0, 15);
+                }
+                    
+                $user->username = $username;
             }
-                
-            $user->username = $username;
         });
     }
 
@@ -76,6 +78,29 @@ class User extends TCGUser implements JWTSubject
     public function setPasswordAttribute($value)
     {
         $this->attributes['password'] = Hash::make($value);
+    }
+
+    /**
+     * Creates the first and last names from the given full name
+     *
+     * @param string $name
+     * @return void
+     */
+    public function setFullNameAttribute($name)
+    {
+        $parts = explode(' ', $name);
+        $this->first_name = $parts[0];
+        $this->last_name = $parts[count($parts) - 1];
+    }
+
+    /**
+     * Creates the full name from the first and last names
+     *
+     * @return void
+     */
+    public function getFullNameAttribute()
+    {
+        return $this->first_name . ' ' . $this->last_name;
     }
 
     /**
@@ -113,7 +138,7 @@ class User extends TCGUser implements JWTSubject
 
     public function roles()
     {
-        return $this->belongsToMany(Role::class);
+        return $this->belongsToMany(Role::class, 'user_roles');
     }
 
     /**

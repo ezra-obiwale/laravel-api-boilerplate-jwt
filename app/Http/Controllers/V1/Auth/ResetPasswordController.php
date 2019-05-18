@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Password;
 use App\Http\Requests\V1\ResetPasswordRequest;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Auth;
 
 class ResetPasswordController extends Controller
 {
@@ -34,7 +35,8 @@ class ResetPasswordController extends Controller
 
         return response()->json([
             'status' => 'ok',
-            'token' => $JWTAuth->fromUser($user)
+            'token' => $JWTAuth->fromUser($user),
+            'expires_in' => Auth::guard()->factory()->getTTL() * 60
         ]);
     }
 

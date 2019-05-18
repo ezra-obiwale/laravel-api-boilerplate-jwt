@@ -43,7 +43,7 @@ class SocialController extends Controller
             $socialUser = $userCheck;
         } else {
             $socialUser = User::create([
-                'name' => $user->name,
+                'full_name' => $user->name,
                 'email' => $email,
                 'password' => bcrypt(str_random(16)),
                 'token' => str_random(64),
@@ -54,7 +54,7 @@ class SocialController extends Controller
             $socialUser->save();
         }
         if (!$socialUser->roles()->count()) {
-            $socialUser->roles()->attach(Role::where('name', 'barttar')->first()->id);
+            $socialUser->roles()->attach(Role::where('name', 'user')->first()->id);
         }
 
         $token = Auth::login($socialUser, true);

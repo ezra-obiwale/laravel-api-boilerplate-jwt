@@ -1,31 +1,26 @@
 <?php
 
-namespace App\Functional\Api\V1\Controllers;
+namespace App\Feature\Api\V1\Controllers;
 
 use DB;
 use Config;
-use App\Entities\V1\User;
 use App\TestCase;
 use Carbon\Carbon;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Laraquick\Tests\Traits\Common;
 
 class ResetPasswordControllerTest extends TestCase
 {
-    use DatabaseMigrations;
+    use Common;
 
-    public function setUp()
+    protected function setUpOnce()
     {
-        parent::setUp();
+        $this->user();
+    }
 
-        $user = new User([
-            'name' => 'Test User',
-            'email' => 'test@email.com',
-            'password' => '123456'
-        ]);
-        $user->save();
-
+    protected function setUpAlways()
+    {
         DB::table('password_resets')->insert([
-            'email' => 'test@email.com',
+            'email' => 'jdoe@email.com',
             'token' => bcrypt('my_super_secret_code'),
             'created_at' => Carbon::now()
         ]);
@@ -34,7 +29,7 @@ class ResetPasswordControllerTest extends TestCase
     public function testResetSuccessfully()
     {
         $this->post('api/auth/reset', [
-            'email' => 'test@email.com',
+            'email' => 'jdoe@email.com',
             'token' => 'my_super_secret_code',
             'password' => 'mynewpass',
             'password_confirmation' => 'mynewpass'
@@ -47,14 +42,17 @@ class ResetPasswordControllerTest extends TestCase
     {
         Config::set('boilerplate.reset_password.release_token', true);
 
-        $this->post('api/auth/reset', [
-            'email' => 'test@email.com',
+        $resp = $this->post('api/auth/reset', [
+            'email' => 'jdoe@email.com',
             'token' => 'my_super_secret_code',
             'password' => 'mynewpass',
             'password_confirmation' => 'mynewpass'
-        ])->assertJsonStructure([
+        ]);
+        $this->storeResponse($resp, 'auth/reset');
+        $resp->assertJsonStructure([
             'status',
-            'token'
+            'token',
+            'expires_in'
         ])->assertJson([
             'status' => 'ok'
         ])->isOk();
@@ -75,7 +73,7 @@ class ResetPasswordControllerTest extends TestCase
     public function testResetReturnsValidationError()
     {
         $this->post('api/auth/reset', [
-            'email' => 'test@email.com',
+            'email' => 'jdoe@email.com',
             'token' => 'my_super_secret_code',
             'password' => 'mynewpass'
         ])->assertJsonStructure([
