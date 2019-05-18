@@ -31,13 +31,13 @@ class ConfirmationAccount extends Mailable
     public function build()
     {
         return $this->markdown('emails.message', $this->createEmailArray())
-            ->subject('Confirm your ' . config('app.name') . ' account, ' . $this->user->name);
+            ->subject('Confirm your ' . config('app.name') . ' account, ' . $this->user->full_name);
     }
 
     public function createEmailArray()
     {
         return [
-            'greeting' => 'Welcome ' . $this->user->name . ',',
+            'greeting' => 'Welcome ' . $this->user->full_name . ',',
             'introLines' => [
                 'Thanks for signing up!',
                 'To start using your ' . config('app.name') . ' account, all you have to do is confirm your email address.'
